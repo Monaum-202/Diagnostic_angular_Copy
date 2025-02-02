@@ -74,6 +74,7 @@ public class Users {
         this.email = email;
     }
     public Users() {
+        
     }
 
     @PrePersist
