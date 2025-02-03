@@ -1,5 +1,6 @@
 package com.example.diagnostic_test.dto;
 
+import com.example.diagnostic_test.entity.security.Users;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,6 +28,8 @@ public class DoctorsDTO {
     private String specialty;  // Doctor's specialty
 
     private String scheduleTime;  // Doctor's available schedule time
+
+    private Users userName;
 
     public Long getId() {
         return id;
@@ -106,5 +109,13 @@ public class DoctorsDTO {
 
     public void setScheduleTime(String scheduleTime) {
         this.scheduleTime = scheduleTime;
+    }
+
+    public Users getUserName() {
+        return userName;
+    }
+
+    public void setUserName(Users userName) {
+        this.userName = userName;
     }
 }

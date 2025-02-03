@@ -3,6 +3,7 @@ package com.example.diagnostic_test.entity;
 import com.example.diagnostic_test.dto.DoctorsDTO;
 import com.example.diagnostic_test.entity.Prescription.Prescription;
 import com.example.diagnostic_test.entity.diagonesticEntry.DiagnosticMoneyReceipt;
+import com.example.diagnostic_test.entity.security.Users;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.ToString;
@@ -12,7 +13,6 @@ import java.util.List;
 @Entity
 @ToString
 public class Doctors {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,17 +36,21 @@ public class Doctors {
 
     private String scheduleTime;
 
-    @OneToMany( cascade = CascadeType.ALL)
+    @OneToOne
+    @JoinColumn(name = "user_name", referencedColumnName = "userName", unique = true)
+    private Users user;
+
+    @OneToMany(cascade = CascadeType.ALL)
     @ToString.Exclude
     @JsonIgnore
     private List<DoctorAppointments> doctorAppointments;
 
-    @OneToMany( cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     @ToString.Exclude
     @JsonIgnore
     private List<Prescription> prescriptions;
 
-    @OneToMany( cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     @ToString.Exclude
     @JsonIgnore
     private List<DiagnosticMoneyReceipt> diagnosticMoneyReceipts;
@@ -64,11 +68,13 @@ public class Doctors {
         dto.setQualification(this.qualification);
         dto.setSpecialty(this.specialty);
         dto.setScheduleTime(this.scheduleTime);
+
+
         return dto;
     }
 
     // Mapping from DTO to Entity
-    public static Doctors mapToEntity(DoctorsDTO dto, Department department) {
+    public static Doctors mapToEntity(DoctorsDTO dto, Department department, Users user) {
         Doctors doctor = new Doctors();
         doctor.setId(dto.getId());
         doctor.setName(dto.getName());
@@ -79,8 +85,15 @@ public class Doctors {
         doctor.setQualification(dto.getQualification());
         doctor.setSpecialty(dto.getSpecialty());
         doctor.setScheduleTime(dto.getScheduleTime());
+        doctor.setUsers(dto.getUserName()); // Map the user from the provided object (assumes user is passed)
+
         return doctor;
     }
+
+    // Getters and setters
+    // You can generate getters and setters using your IDE or manually
+
+
 
     public Long getId() {
         return id;
@@ -176,6 +189,15 @@ public class Doctors {
 
     public void setDiagnosticMoneyReceipts(List<DiagnosticMoneyReceipt> diagnosticMoneyReceipts) {
         this.diagnosticMoneyReceipts = diagnosticMoneyReceipts;
+    }
+
+
+    public Users getUsers() {
+        return user;
+    }
+
+    public void setUsers(Users users) {
+        this.user = users;
     }
 }
 
